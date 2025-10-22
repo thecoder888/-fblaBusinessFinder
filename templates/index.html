@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Byte-Sized Business Boost</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+        
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .search-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+        }
+        
+        .search-form {
+            display: grid;
+            gap: 15px;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        label {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        
+        input, select {
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        button {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .results-section {
+            display: none;
+        }
+        
+        .results-section.active {
+            display: block;
+        }
+        
+        .results-header {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .results-count {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .business-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+        }
+        
+        .business-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+        
+        .business-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        
+        .business-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: #f0f0f0;
+        }
+        
+        .business-content {
+            padding: 20px;
+        }
+        
+        .business-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 10px;
+        }
+        
+        .business-name {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .bookmark-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 0;
+            transition: transform 0.2s;
+        }
+        
+        .bookmark-btn:hover {
+            transform: scale(1.2);
+        }
+        
+        .business-category {
+            display: inline-block;
+            padding: 5px 10px;
+            background: #f0f0f0;
+            border-radius: 5px;
+            font-size: 0.85em;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        
+        .business-rating {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .stars {
+            color: #ffa500;
+            font-size: 1.2em;
+        }
+        
+        .rating-number {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .review-count {
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .business-address {
+            color: #666;
+            margin-bottom: 10px;
+            font-size: 0.95em;
+        }
+        
+        .business-badges {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .badge {
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+        
+        .badge-deals {
+            background: #ffebee;
+            color: #c62828;
+        }
+        
+        .loading {
+            text-align: center;
+            color: white;
+            font-size: 1.5em;
+            padding: 40px;
+        }
+        
+        .no-results {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            color: #666;
+        }
+        
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .business-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏪 Byte-Sized Business Boost</h1>
+            <p>Discover and support local businesses in your community</p>
+        </header>
+        
+        <div class="search-section">
+            <form class="search-form" id="searchForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="searchTerm">What are you looking for?</label>
+                        <input type="text" id="searchTerm" placeholder="e.g., coffee, pizza, bookstore" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="location">Location</label>
+                        <input type="text" id="location" value="Des Moines, IA" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="category">Category</label>
+                        <select id="category">
+                            <option value="">All Categories</option>
+                            <option value="restaurants">Food & Restaurants</option>
+                            <option value="shopping">Retail & Shopping</option>
+                            <option value="homeservices">Home Services</option>
+                            <option value="beautysvc">Beauty & Spa</option>
+                            <option value="active">Active Life & Fitness</option>
+                            <option value="arts">Arts & Entertainment</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="sortBy">Sort By</label>
+                        <select id="sortBy">
+                            <option value="relevance">Relevance</option>
+                            <option value="rating">Highest Rated</option>
+                            <option value="reviews">Most Reviews</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <button type="submit">🔍 Search Businesses</button>
+            </form>
+        </div>
+        
+        <div id="loading" class="loading" style="display: none;">
+            Searching for businesses...
+        </div>
+        
+        <div class="results-section" id="resultsSection">
+            <div class="results-header">
+                <div class="results-count" id="resultsCount">0 businesses found</div>
+            </div>
+            
+            <div class="business-grid" id="businessGrid"></div>
+            
+            <div class="no-results" id="noResults" style="display: none;">
+                <h2>No businesses found</h2>
+                <p>Try adjusting your search terms or location</p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const searchForm = document.getElementById('searchForm');
+        const loading = document.getElementById('loading');
+        const resultsSection = document.getElementById('resultsSection');
+        const businessGrid = document.getElementById('businessGrid');
+        const resultsCount = document.getElementById('resultsCount');
+        const noResults = document.getElementById('noResults');
+        
+        // Handle form submission
+        searchForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const term = document.getElementById('searchTerm').value;
+            const location = document.getElementById('location').value;
+            const category = document.getElementById('category').value;
+            const sortBy = document.getElementById('sortBy').value;
+            
+            // Show loading
+            loading.style.display = 'block';
+            resultsSection.classList.remove('active');
+            
+            try {
+                const response = await fetch('/search', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        term: term,
+                        location: location,
+                        category: category,
+                        sort_by: sortBy
+                    })
+                });
+                
+                const businesses = await response.json();
+                
+                // Hide loading
+                loading.style.display = 'none';
+                
+                // Display results
+                displayResults(businesses);
+                
+            } catch (error) {
+                console.error('Error:', error);
+                loading.style.display = 'none';
+                alert('Error searching for businesses. Please try again.');
+            }
+        });
+        
+        // Display search results
+        function displayResults(businesses) {
+            resultsSection.classList.add('active');
+            businessGrid.innerHTML = '';
+            
+            if (businesses.length === 0) {
+                noResults.style.display = 'block';
+                resultsCount.textContent = '0 businesses found';
+                return;
+            }
+            
+            noResults.style.display = 'none';
+            resultsCount.textContent = `${businesses.length} business${businesses.length !== 1 ? 'es' : ''} found`;
+            
+            businesses.forEach(business => {
+                const card = createBusinessCard(business);
+                businessGrid.appendChild(card);
+            });
+        }
+        
+        // Create business card element
+        function createBusinessCard(business) {
+            const card = document.createElement('div');
+            card.className = 'business-card';
+            card.onclick = () => window.location.href = `/business/${business.id}`;
+            
+            const stars = '⭐'.repeat(Math.round(business.combined_rating || business.rating || 0));
+            const category = business.categories && business.categories[0] ? business.categories[0].title : 'Business';
+            const address = business.location.display_address.join(', ');
+            const totalReviews = (business.review_count || 0) + (business.user_review_count || 0);
+            
+            card.innerHTML = `
+                <img src="${business.image_url || 'https://via.placeholder.com/400x200?text=No+Image'}" 
+                     alt="${business.name}" 
+                     class="business-image"
+                     onerror="this.src='https://via.placeholder.com/400x200?text=No+Image'">
+                <div class="business-content">
+                    <div class="business-header">
+                        <div>
+                            <div class="business-name">${business.name}</div>
+                            <div class="business-category">${category}</div>
+                        </div>
+                        <button class="bookmark-btn" onclick="toggleBookmark(event, '${business.id}', this)">
+                            ${business.is_bookmarked ? '⭐' : '☆'}
+                        </button>
+                    </div>
+                    
+                    <div class="business-rating">
+                        <span class="stars">${stars}</span>
+                        <span class="rating-number">${(business.combined_rating || business.rating || 0).toFixed(1)}</span>
+                        <span class="review-count">(${totalReviews} reviews)</span>
+                    </div>
+                    
+                    <div class="business-address">📍 ${address}</div>
+                    
+                    ${business.has_deals ? '<div class="business-badges"><span class="badge badge-deals">🎉 Special Deals</span></div>' : ''}
+                </div>
+            `;
+            
+            return card;
+        }
+        
+        // Toggle bookmark
+        async function toggleBookmark(event, businessId, button) {
+            event.stopPropagation();
+            
+            try {
+                const response = await fetch('/toggle_bookmark', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        business_id: businessId,
+                        user_name: 'default_user'
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    button.textContent = result.bookmarked ? '⭐' : '☆';
+                }
+            } catch (error) {
+                console.error('Error toggling bookmark:', error);
+            }
+        }
+    </script>
+</body>
+</html>

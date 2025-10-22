@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ data.business.name }} - Business Details</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .back-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background: white;
+            color: #667eea;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 600;
+            transition: transform 0.2s;
+        }
+        
+        .back-button:hover {
+            transform: translateY(-2px);
+        }
+        
+        .business-header {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .business-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .business-title {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .business-category {
+            display: inline-block;
+            padding: 8px 15px;
+            background: #f0f0f0;
+            border-radius: 5px;
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 15px;
+        }
+        
+        .rating-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+        
+        .stars {
+            color: #ffa500;
+            font-size: 1.5em;
+        }
+        
+        .info-grid {
+            display: grid;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #666;
+        }
+        
+        .content-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .section-title {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        
+        .deals-grid {
+            display: grid;
+            gap: 15px;
+        }
+        
+        .deal-card {
+            padding: 20px;
+            background: #fff3e0;
+            border-left: 4px solid #ff9800;
+            border-radius: 8px;
+        }
+        
+        .deal-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #e65100;
+            margin-bottom: 5px;
+        }
+        
+        .deal-description {
+            color: #666;
+        }
+        
+        .review-form {
+            background: #f9f9f9;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: inherit;
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        button {
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+        }
+        
+        .reviews-list {
+            display: grid;
+            gap: 20px;
+        }
+        
+        .review-card {
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 10px;
+        }
+        
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .reviewer-name {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .review-date {
+            color: #999;
+            font-size: 0.9em;
+        }
+        
+        .review-rating {
+            color: #ffa500;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+        
+        .review-text {
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .no-reviews {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+        
+        .success-message {
+            padding: 15px;
+            background: #d4edda;
+            color: #155724;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .success-message.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back-button">← Back to Search</a>
+        
+        <div class="business-header">
+            <img src="{{ data.business.image_url or 'https://via.placeholder.com/1000x300?text=No+Image' }}" 
+                 alt="{{ data.business.name }}" 
+                 class="business-image"
+                 onerror="this.src='https://via.placeholder.com/1000x300?text=No+Image'">
+            
+            <h1 class="business-title">{{ data.business.name }}</h1>
+            
+            <span class="business-category">{{ data.business.category }}</span>
+            
+            <div class="rating-section">
+                <span class="stars">{{ '⭐' * (data.combined_rating | round | int) }}</span>
+                <span class="rating-number">{{ data.combined_rating }} stars</span>
+                <span class="review-count">({{ data.total_reviews }} reviews)</span>
+            </div>
+            
+            <div class="info-grid">
+                <div class="info-item">
+                    <span>📍</span>
+                    <span>{{ data.business.address }}</span>
+                </div>
+                
+                {% if data.business.phone %}
+                <div class="info-item">
+                    <span>📞</span>
+                    <span>{{ data.business.phone }}</span>
+                </div>
+                {% endif %}
+                
+                <div class="info-item">
+                    <span>🌐</span>
+                    <a href="{{ data.business.yelp_url }}" target="_blank" style="color: #667eea; text-decoration: none;">View on Yelp</a>
+                </div>
+            </div>
+        </div>
+        
+        {% if data.deals %}
+        <div class="content-section">
+            <h2 class="section-title">Special Deals & Coupons</h2>
+            <div class="deals-grid">
+                {% for deal in data.deals %}
+                <div class="deal-card">
+                    <div class="deal-title">{{ deal.title }}</div>
+                    <div class="deal-description">{{ deal.description }}</div>
+                    {% if deal.discount_percent %}
+                    <div style="color: #e65100; font-weight: 600; margin-top: 5px;">
+                        Save {{ deal.discount_percent }}%!
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        
+        <div class="content-section">
+            <h2 class="section-title">Leave a Review</h2>
+            
+            <div id="successMessage" class="success-message">
+                Review submitted successfully! ✓
+            </div>
+            
+            <form class="review-form" id="reviewForm">
+                <div class="form-group">
+                    <label for="reviewerName">Your Name *</label>
+                    <input type="text" id="reviewerName" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="rating">Rating *</label>
+                    <select id="rating" required>
+                        <option value="">Select a rating</option>
+                        <option value="5">⭐⭐⭐⭐⭐ (5 stars)</option>
+                        <option value="4">⭐⭐⭐⭐ (4 stars)</option>
+                        <option value="3">⭐⭐⭐ (3 stars)</option>
+                        <option value="2">⭐⭐ (2 stars)</option>
+                        <option value="1">⭐ (1 star)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="reviewText">Your Review</label>
+                    <textarea id="reviewText" placeholder="Share your experience..."></textarea>
+                </div>
+                
+                <button type="submit">Submit Review</button>
+            </form>
+        </div>
+        
+        <div class="content-section">
+            <h2 class="section-title">Customer Reviews</h2>
+            
+            <div class="reviews-list" id="reviewsList">
+                {% if data.reviews %}
+                    {% for review in data.reviews %}
+                    <div class="review-card">
+                        <div class="review-header">
+                            <span class="reviewer-name">{{ review.reviewer_name }}</span>
+                            <span class="review-date">{{ review.created_at }}</span>
+                        </div>
+                        <div class="review-rating">{{ '⭐' * review.rating }}</div>
+                        {% if review.review_text %}
+                        <div class="review-text">{{ review.review_text }}</div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="no-reviews">
+                        <p>No reviews yet. Be the first to review!</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const reviewForm = document.getElementById('reviewForm');
+        const successMessage = document.getElementById('successMessage');
+        const businessId = "{{ data.business.id }}";
+        
+        reviewForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const reviewerName = document.getElementById('reviewerName').value;
+            const rating = document.getElementById('rating').value;
+            const reviewText = document.getElementById('reviewText').value;
+            
+            try {
+                const response = await fetch('/add_review', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        business_id: businessId,
+                        rating: parseInt(rating),
+                        review_text: reviewText,
+                        reviewer_name: reviewerName
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    // Show success message
+                    successMessage.classList.add('show');
+                    
+                    // Clear form
+                    reviewForm.reset();
+                    
+                    // Reload page after 2 seconds to show new review
+                    setTimeout(() => {
+                        location.reload();
+                    }, 2000);
+                } else {
+                    alert('Error submitting review: ' + result.error);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error submitting review. Please try again.');
+            }
+        });
+    </script>
+</body>
+</html>
