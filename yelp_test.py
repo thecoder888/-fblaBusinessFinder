@@ -8,7 +8,6 @@ from datetime import datetime
 # Load environment variables
 load_dotenv()
 
-# Get the absolute path to the templates folder
 template_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
 app = Flask(__name__, template_folder=template_dir)
 
@@ -19,10 +18,6 @@ if not API_KEY:
 
 YELP_HEADERS = {"Authorization": f"Bearer {API_KEY}"}
 YELP_URL = "https://api.yelp.com/v3/businesses/search"
-
-# reCAPTCHA Configuration
-RECAPTCHA_SECRET_KEY = os.getenv("RECAPTCHA_SECRET_KEY")
-RECAPTCHA_VERIFY_URL = "https://www.google.com/recaptcha/api/siteverify"
 
 # Database Configuration
 DATABASE = 'local_business_boost.db'
@@ -38,33 +33,6 @@ def get_db_connection():
     conn = sqlite3.connect(DATABASE)
     conn.row_factory = sqlite3.Row  # Access columns by name
     return conn
-
-
-def verify_recaptcha(recaptcha_response):
-    """
-    Verify reCAPTCHA response with Google.
-    
-    Args:
-        recaptcha_response (str): Response token from client
-    
-    Returns:
-        bool: True if verification successful, False otherwise
-    """
-    if not RECAPTCHA_SECRET_KEY:
-        print("Warning: RECAPTCHA_SECRET_KEY not set")
-        return True  # Allow in development if key not set
-    
-    try:
-        response = requests.post(RECAPTCHA_VERIFY_URL, data={
-            'secret': RECAPTCHA_SECRET_KEY,
-            'response': recaptcha_response
-        }, timeout=5)
-        
-        result = response.json()
-        return result.get('success', False)
-    except Exception as e:
-        print(f"reCAPTCHA verification error: {e}")
-        return False
 
 
 def init_db():
@@ -371,11 +339,6 @@ def add_review():
     """
     data = request.get_json()
     
-    # Verify reCAPTCHA
-    recaptcha_response = data.get('recaptcha_response', '')
-    if not verify_recaptcha(recaptcha_response):
-        return jsonify({'error': 'reCAPTCHA verification failed. Please try again.'}), 400
-    
     # Validate input
     business_id = data.get('business_id', '').strip()
     rating = data.get('rating')
@@ -449,98 +412,9 @@ def toggle_bookmark():
     return jsonify({'success': True, 'bookmarked': bookmarked})
 
 
-# Admin Routes for Deals Management
-
-@app.route('/admin')
-def admin():
-    """
-    Admin page for managing deals.
-    """
-    return render_template('admin.html')
-
-
-@app.route('/admin/add_deal', methods=['POST'])
-def add_deal():
-    """
-    Add a new deal for a business.
-    """
-    data = request.get_json()
-    
-    business_id = data.get('business_id', '').strip()
-    title = data.get('title', '').strip()
-    description = data.get('description', '').strip()
-    discount_percent = data.get('discount_percent')
-    expiry_date = data.get('expiry_date')
-    
-    if not business_id or not title:
-        return jsonify({'error': 'Business ID and title are required'}), 400
-    
-    try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        
-        cursor.execute('''
-            INSERT INTO deals (business_id, title, description, discount_percent, expiry_date)
-            VALUES (?, ?, ?, ?, ?)
-        ''', (business_id, title, description, discount_percent, expiry_date))
-        
-        conn.commit()
-        conn.close()
-        
-        return jsonify({'success': True, 'message': 'Deal added successfully'})
-        
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
-
-@app.route('/admin/get_deals')
-def get_deals():
-    """
-    Get all deals with business information.
-    """
-    conn = get_db_connection()
-    
-    deals = conn.execute('''
-        SELECT d.*, b.name as business_name
-        FROM deals d
-        LEFT JOIN businesses b ON d.business_id = b.id
-        ORDER BY d.created_at DESC
-    ''').fetchall()
-    
-    conn.close()
-    
-    return jsonify([dict(deal) for deal in deals])
-
-
-@app.route('/admin/delete_deal', methods=['POST'])
-def delete_deal():
-    """
-    Delete a deal.
-    """
-    data = request.get_json()
-    deal_id = data.get('deal_id')
-    
-    if not deal_id:
-        return jsonify({'error': 'Deal ID required'}), 400
-    
-    try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        
-        cursor.execute('DELETE FROM deals WHERE id = ?', (deal_id,))
-        
-        conn.commit()
-        conn.close()
-        
-        return jsonify({'success': True, 'message': 'Deal deleted successfully'})
-        
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
-
 if __name__ == '__main__':
     # Initialize database on startup
     init_db()
     
     # Run Flask app
-    app.run(debug=True, port=5000)
+    app.run(debug=True, port=5000)     

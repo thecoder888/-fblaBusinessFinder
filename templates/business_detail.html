@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Google reCAPTCHA -->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <style>
         * {
             margin: 0;
@@ -40,6 +42,12 @@
             font-weight: 600;
             transition: transform 0.2s, box-shadow 0.2s;
             box-shadow: 0 5px 15px rgba(197, 151, 157, 0.15);
+        }
+        
+        .page-logo {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
         }
         
         .back-button:hover {
@@ -310,6 +318,29 @@
             display: flex;
         }
         
+        .recaptcha-container {
+            margin: 15px 0;
+        }
+        
+        .error-message {
+            padding: 15px;
+            background: #ffebee;
+            color: #c62828;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: none;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .error-message.show {
+            display: flex;
+        }
+        
+        .error-message i {
+            font-size: 1.2em;
+        }
+        
         .success-message i {
             font-size: 1.2em;
         }
@@ -329,6 +360,7 @@
     <div class="container">
         <a href="/" class="back-button">
             <i class="fa-solid fa-arrow-left"></i>
+            <img src="/static/images/logo.svg" alt="Logo" class="page-logo">
             Back to Search
         </a>
         
@@ -412,6 +444,11 @@
                 Review submitted successfully!
             </div>
             
+            <div id="errorMessage" class="error-message">
+                <i class="fa-solid fa-circle-exclamation"></i>
+                <span id="errorText">Please complete the verification.</span>
+            </div>
+            
             <form class="review-form" id="reviewForm">
                 <div class="form-group">
                     <label for="reviewerName">Your Name *</label>
@@ -433,6 +470,10 @@
                 <div class="form-group">
                     <label for="reviewText">Your Review</label>
                     <textarea id="reviewText" placeholder="Share your experience..."></textarea>
+                </div>
+                
+                <div class="recaptcha-container">
+                    <div class="g-recaptcha" data-sitekey="6LfYCP8rAAAAAMzTKapj0F183Z1VLDx-Sa_KWCjC"></div>
                 </div>
                 
                 <button type="submit">Submit Review</button>
@@ -478,10 +519,25 @@
     <script>
         const reviewForm = document.getElementById('reviewForm');
         const successMessage = document.getElementById('successMessage');
+        const errorMessage = document.getElementById('errorMessage');
+        const errorText = document.getElementById('errorText');
         const businessId = "{{ data.business.id }}";
         
         reviewForm.addEventListener('submit', async (e) => {
             e.preventDefault();
+            
+            // Hide previous messages
+            successMessage.classList.remove('show');
+            errorMessage.classList.remove('show');
+            
+            // Get reCAPTCHA response
+            const recaptchaResponse = grecaptcha.getResponse();
+            
+            if (!recaptchaResponse) {
+                errorText.textContent = 'Please complete the "I\'m not a robot" verification.';
+                errorMessage.classList.add('show');
+                return;
+            }
             
             const reviewerName = document.getElementById('reviewerName').value;
             const rating = document.getElementById('rating').value;
@@ -497,7 +553,8 @@
                         business_id: businessId,
                         rating: parseInt(rating),
                         review_text: reviewText,
-                        reviewer_name: reviewerName
+                        reviewer_name: reviewerName,
+                        recaptcha_response: recaptchaResponse
                     })
                 });
                 
@@ -506,16 +563,21 @@
                 if (result.success) {
                     successMessage.classList.add('show');
                     reviewForm.reset();
+                    grecaptcha.reset();
                     
                     setTimeout(() => {
                         location.reload();
                     }, 2000);
                 } else {
-                    alert('Error submitting review: ' + result.error);
+                    errorText.textContent = result.error || 'Error submitting review. Please try again.';
+                    errorMessage.classList.add('show');
+                    grecaptcha.reset();
                 }
             } catch (error) {
                 console.error('Error:', error);
-                alert('Error submitting review. Please try again.');
+                errorText.textContent = 'Error submitting review. Please try again.';
+                errorMessage.classList.add('show');
+                grecaptcha.reset();
             }
         });
     </script>

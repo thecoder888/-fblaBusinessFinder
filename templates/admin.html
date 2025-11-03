@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Manage Deals</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #FFC1CC 0%, #D4E7C5 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            font-family: 'Abril Fatface', cursive;
+            font-size: 2.5em;
+            color: #C5979D;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .logo {
+            width: 60px;
+            height: 60px;
+        }
+        
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: white;
+            color: #C5979D;
+            text-decoration: none;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-weight: 600;
+            transition: transform 0.2s;
+            box-shadow: 0 5px 15px rgba(197, 151, 157, 0.15);
+        }
+        
+        .back-button:hover {
+            transform: translateY(-2px);
+        }
+        
+        .admin-section {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(197, 151, 157, 0.2);
+            margin-bottom: 30px;
+        }
+        
+        .section-title {
+            font-family: 'Abril Fatface', cursive;
+            font-size: 1.8em;
+            color: #4a4a4a;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .section-title i {
+            color: #6B8E4E;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #4a4a4a;
+        }
+        
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #f0f0f0;
+            border-radius: 12px;
+            font-size: 16px;
+            font-family: 'Poppins', sans-serif;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #C5979D;
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        button {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #C5979D 0%, #6B8E4E 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+            cursor: pointer;
+            transition: transform 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+        }
+        
+        .success-message, .error-message {
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: none;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .success-message {
+            background: #d4f4dd;
+            color: #2e7d32;
+        }
+        
+        .error-message {
+            background: #ffebee;
+            color: #c62828;
+        }
+        
+        .success-message.show, .error-message.show {
+            display: flex;
+        }
+        
+        .deals-list {
+            display: grid;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .deal-item {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 4px solid #6B8E4E;
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+        }
+        
+        .deal-content h3 {
+            color: #4a4a4a;
+            margin-bottom: 5px;
+        }
+        
+        .deal-business {
+            color: #6B8E4E;
+            font-size: 0.9em;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .deal-description {
+            color: #666;
+            margin-bottom: 8px;
+        }
+        
+        .deal-meta {
+            display: flex;
+            gap: 15px;
+            font-size: 0.9em;
+            color: #888;
+        }
+        
+        .delete-btn {
+            background: #c62828;
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+        
+        .delete-btn:hover {
+            background: #b71c1c;
+        }
+        
+        .no-deals {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+        
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back-button">
+            <i class="fa-solid fa-arrow-left"></i>
+            Back to Home
+        </a>
+        
+        <div class="header">
+            <h1>
+                <img src="/static/images/logo.svg" alt="Logo" class="logo">
+                Admin - Manage Deals
+            </h1>
+        </div>
+        
+        <div class="admin-section">
+            <h2 class="section-title">
+                <i class="fa-solid fa-plus-circle"></i>
+                Add New Deal
+            </h2>
+            
+            <div id="successMessage" class="success-message">
+                <i class="fa-solid fa-circle-check"></i>
+                Deal added successfully!
+            </div>
+            
+            <div id="errorMessage" class="error-message">
+                <i class="fa-solid fa-circle-exclamation"></i>
+                <span id="errorText">Error adding deal.</span>
+            </div>
+            
+            <form id="dealForm">
+                <div class="form-group">
+                    <label for="businessId">Business ID *</label>
+                    <input type="text" id="businessId" required placeholder="Enter Yelp business ID (e.g., abc123xyz)">
+                    <small style="color: #888;">Tip: Find this in the URL when viewing a business</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="dealTitle">Deal Title *</label>
+                    <input type="text" id="dealTitle" required placeholder="e.g., 20% Off All Drinks">
+                </div>
+                
+                <div class="form-group">
+                    <label for="dealDescription">Description</label>
+                    <textarea id="dealDescription" placeholder="Describe the deal details..."></textarea>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="discountPercent">Discount Percentage</label>
+                        <input type="number" id="discountPercent" min="0" max="100" placeholder="e.g., 20">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="expiryDate">Expiry Date (Optional)</label>
+                        <input type="date" id="expiryDate">
+                    </div>
+                </div>
+                
+                <button type="submit">
+                    <i class="fa-solid fa-plus"></i>
+                    Add Deal
+                </button>
+            </form>
+        </div>
+        
+        <div class="admin-section">
+            <h2 class="section-title">
+                <i class="fa-solid fa-list"></i>
+                Current Deals
+            </h2>
+            
+            <div id="dealsList" class="deals-list">
+                <div class="no-deals">Loading deals...</div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Load deals on page load
+        loadDeals();
+        
+        // Handle form submission
+        document.getElementById('dealForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const successMessage = document.getElementById('successMessage');
+            const errorMessage = document.getElementById('errorMessage');
+            const errorText = document.getElementById('errorText');
+            
+            successMessage.classList.remove('show');
+            errorMessage.classList.remove('show');
+            
+            const dealData = {
+                business_id: document.getElementById('businessId').value.trim(),
+                title: document.getElementById('dealTitle').value.trim(),
+                description: document.getElementById('dealDescription').value.trim(),
+                discount_percent: document.getElementById('discountPercent').value || null,
+                expiry_date: document.getElementById('expiryDate').value || null
+            };
+            
+            try {
+                const response = await fetch('/admin/add_deal', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(dealData)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    successMessage.classList.add('show');
+                    document.getElementById('dealForm').reset();
+                    loadDeals();
+                    
+                    setTimeout(() => {
+                        successMessage.classList.remove('show');
+                    }, 3000);
+                } else {
+                    errorText.textContent = result.error || 'Error adding deal.';
+                    errorMessage.classList.add('show');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                errorText.textContent = 'Error adding deal. Please try again.';
+                errorMessage.classList.add('show');
+            }
+        });
+        
+        // Load and display all deals
+        async function loadDeals() {
+            const dealsList = document.getElementById('dealsList');
+            
+            try {
+                const response = await fetch('/admin/get_deals');
+                const deals = await response.json();
+                
+                if (deals.length === 0) {
+                    dealsList.innerHTML = '<div class="no-deals">No deals yet. Add your first deal above!</div>';
+                    return;
+                }
+                
+                dealsList.innerHTML = deals.map(deal => `
+                    <div class="deal-item">
+                        <div class="deal-content">
+                            <div class="deal-business">${deal.business_name || deal.business_id}</div>
+                            <h3>${deal.title}</h3>
+                            ${deal.description ? `<div class="deal-description">${deal.description}</div>` : ''}
+                            <div class="deal-meta">
+                                ${deal.discount_percent ? `<span><i class="fa-solid fa-tag"></i> ${deal.discount_percent}% off</span>` : ''}
+                                ${deal.expiry_date ? `<span><i class="fa-solid fa-calendar"></i> Expires: ${deal.expiry_date}</span>` : ''}
+                            </div>
+                        </div>
+                        <button class="delete-btn" onclick="deleteDeal(${deal.id})">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                `).join('');
+                
+            } catch (error) {
+                console.error('Error loading deals:', error);
+                dealsList.innerHTML = '<div class="no-deals">Error loading deals.</div>';
+            }
+        }
+        
+        // Delete a deal
+        async function deleteDeal(dealId) {
+            if (!confirm('Are you sure you want to delete this deal?')) {
+                return;
+            }
+            
+            try {
+                const response = await fetch('/admin/delete_deal', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ deal_id: dealId })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    loadDeals();
+                } else {
+                    alert('Error deleting deal: ' + result.error);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error deleting deal. Please try again.');
+            }
+        }
+    </script>
+</body>
+</html>

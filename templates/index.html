@@ -38,6 +38,15 @@
             font-size: 3em;
             margin-bottom: 10px;
             color: #C5979D;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+        }
+        
+        .logo {
+            width: 80px;
+            height: 80px;
         }
         
         header p {
@@ -316,7 +325,10 @@
 <body>
     <div class="container">
         <header>
-            <h1>Business Finder</h1>
+            <h1>
+                <img src="/static/images/logo.svg" alt="Business Finder Logo" class="logo">
+                Business Finder
+            </h1>
             <p>Discover and support local businesses in your community</p>
         </header>
         
