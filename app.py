@@ -139,15 +139,6 @@ def init_db():
 def search_yelp(term, location, category=None, limit=10):
     """
     Search for businesses on Yelp API.
-    
-    Args:
-        term (str): Search term (e.g., "coffee", "pizza")
-        location (str): Location to search in
-        category (str): Optional category filter
-        limit (int): Number of results to return
-    
-    Returns:
-        list: List of business dictionaries
     """
     params = {
         "term": term,
@@ -158,8 +149,17 @@ def search_yelp(term, location, category=None, limit=10):
     if category:
         params["categories"] = category
     
+    # DEBUG: Print what we're sending
+    print(f"DEBUG - Searching Yelp with params: {params}")
+    
     try:
         response = requests.get(YELP_URL, headers=YELP_HEADERS, params=params, timeout=10)
+        
+        # DEBUG: Print response
+        print(f"DEBUG - Status Code: {response.status_code}")
+        if response.status_code != 200:
+            print(f"DEBUG - Error Response: {response.text}")
+        
         response.raise_for_status()
         data = response.json()
         businesses = data.get("businesses", [])
