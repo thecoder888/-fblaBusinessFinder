@@ -49,6 +49,29 @@
             height: 80px;
         }
         
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        nav a {
+            padding: 10px 20px;
+            background: white;
+            color: #C5979D;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 3px 10px rgba(197, 151, 157, 0.15);
+        }
+        
+        nav a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(197, 151, 157, 0.25);
+        }
+        
         header p {
             font-size: 1.2em;
             font-weight: 300;
@@ -331,6 +354,12 @@
             </h1>
             <p>Discover and support local businesses in your community</p>
         </header>
+        
+        <nav>
+            <a href="/"><i class="fa-solid fa-home"></i> Home</a>
+            <a href="/help"><i class="fa-solid fa-circle-question"></i> Help</a>
+            <a href="/admin"><i class="fa-solid fa-user-shield"></i> Admin</a>
+        </nav>
         
         <div class="search-section">
             <form class="search-form" id="searchForm">

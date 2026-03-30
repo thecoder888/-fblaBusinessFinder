@@ -11,10 +11,11 @@ env/
 
 # Database
 *.db
+*.sqbpro
 
 # IDE
 .vscode/
 .idea/
 
 # OS
-.DS_Storeyelp_test.py
+.DS_Store

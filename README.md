@@ -285,36 +285,12 @@ Special offers and coupons
 **Issue**: Logo doesn't display
 - **Solution**: Verify file is at `static/images/logo.svg`
 
----
-
-## FBLA Competition Notes
-
-### Requirements Checklist
--  Sorting businesses by category
--  Allowing users to leave reviews or ratings
--  Sorting businesses by reviews or ratings
--  Saving or bookmarking favorite businesses
--  Display special deals or coupons
--  Verification step to prevent bot activity
-
-### Presentation Tips
-1. **Demo the full user flow**: Search → View → Review → Bookmark
-2. **Show the admin panel**: Add a live deal during presentation
-3. **Highlight bot prevention**: Demonstrate reCAPTCHA in action
-4. **Explain technology choices**: Why Flask? Why SQLite? Why Yelp API?
-5. **Discuss challenges overcome**: Template folder naming, API integration, etc.
-
-### Documentation Provided
-- Comprehensive README (this file)
-- Inline code comments throughout
-- requirements.txt for dependencies
-- .gitignore for clean repository
 
 ---
 
 ## Credits
 
-**Developer**: Aisha Newland, Sriya Munjuluri
+**Developer**: Aisha Newland
 **School**: Waukee High School 
 **FBLA Chapter**: Waukee High School Chapter
 **Competition**: FBLA Coding & Programming Event 2025-2026  
@@ -341,7 +317,7 @@ This project was created for the FBLA Coding & Programming competition. All righ
 ## Contact
 
 For questions about this project, please contact:
-- **Email**: [aishamtnewland@example.com]
+- **Email**: [aishamtnewland@egmail.com]
 - **GitHub**: [github.com/thecoder888]
 
 ---
@@ -352,7 +328,3 @@ For questions about this project, please contact:
 - **Code.org** for partnering on this year's topic
 - **Yelp** for providing the Fusion API
 - **Google** for reCAPTCHA service
-
----
-
-**Built with ❤️ for FBLA 2025-2026**

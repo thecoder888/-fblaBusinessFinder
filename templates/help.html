@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help - Business Finder</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #FFC1CC 0%, #D4E7C5 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: white;
+            color: #C5979D;
+            text-decoration: none;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-weight: 600;
+            transition: transform 0.2s;
+            box-shadow: 0 5px 15px rgba(197, 151, 157, 0.15);
+        }
+        
+        .back-button:hover {
+            transform: translateY(-2px);
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        header h1 {
+            font-family: 'Abril Fatface', cursive;
+            font-size: 2.5em;
+            color: #C5979D;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .logo {
+            width: 60px;
+            height: 60px;
+        }
+        
+        header p {
+            font-size: 1.1em;
+            color: #6B8E4E;
+        }
+        
+        .help-section {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(197, 151, 157, 0.2);
+            margin-bottom: 20px;
+        }
+        
+        .section-title {
+            font-family: 'Abril Fatface', cursive;
+            font-size: 1.8em;
+            color: #4a4a4a;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .section-title i {
+            color: #C5979D;
+        }
+        
+        .faq-item {
+            margin-bottom: 25px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .faq-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+            margin-bottom: 0;
+        }
+        
+        .faq-question {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #6B8E4E;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .faq-question i {
+            font-size: 0.9em;
+        }
+        
+        .faq-answer {
+            color: #666;
+            line-height: 1.6;
+            padding-left: 30px;
+        }
+        
+        .feature-list {
+            display: grid;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: start;
+            gap: 12px;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 10px;
+        }
+        
+        .feature-icon {
+            color: #C5979D;
+            font-size: 1.5em;
+            margin-top: 3px;
+        }
+        
+        .feature-content h3 {
+            color: #4a4a4a;
+            margin-bottom: 5px;
+        }
+        
+        .feature-content p {
+            color: #666;
+            font-size: 0.95em;
+        }
+        
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back-button">
+            <i class="fa-solid fa-arrow-left"></i>
+            Back to Home
+        </a>
+        
+        <header>
+            <h1>
+                <img src="/static/images/logo.svg" alt="Logo" class="logo">
+                Help & FAQ
+            </h1>
+            <p>Everything you need to know about using Business Finder</p>
+        </header>
+        
+        <div class="help-section">
+            <h2 class="section-title">
+                <i class="fa-solid fa-circle-question"></i>
+                Frequently Asked Questions
+            </h2>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    How do I search for businesses?
+                </div>
+                <div class="faq-answer">
+                    Enter what you're looking for (like "coffee" or "pizza") in the search box, specify your location, and optionally filter by category. Click "Search Businesses" to see results from local businesses in your area.
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <i class="fa-solid fa-filter"></i>
+                    How do I filter and sort results?
+                </div>
+                <div class="faq-answer">
+                    Use the "Category" dropdown to filter by business type (food, retail, services, etc.). Use the "Sort By" dropdown to organize results by relevance, highest rated, or most reviews.
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <i class="fa-solid fa-star"></i>
+                    What does the star icon mean?
+                </div>
+                <div class="faq-answer">
+                    The star icon lets you bookmark your favorite businesses. Click the empty star (☆) to save a business. Click the filled star (⭐) to remove it from your bookmarks. Your bookmarks are saved automatically.
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <i class="fa-solid fa-comment"></i>
+                    How do I leave a review?
+                </div>
+                <div class="faq-answer">
+                    Click on any business to view its details page. Scroll down to the review form, enter your name, select a star rating (1-5), write your review (optional), and complete the "I'm not a robot" verification. Click "Submit Review" to save your feedback.
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    Why do I need to verify I'm not a robot?
+                </div>
+                <div class="faq-answer">
+                    We use Google reCAPTCHA to prevent automated bots from submitting fake reviews. This keeps our reviews authentic and trustworthy. Simply check the "I'm not a robot" box before submitting your review.
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <i class="fa-solid fa-tag"></i>
+                    What are special deals and coupons?
+                </div>
+                <div class="faq-answer">
+                    Some businesses offer exclusive deals and discounts. Look for the "Special Deals" badge on business cards in search results, or check the business detail page for current offers with discount percentages and expiration dates.
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <i class="fa-solid fa-user-shield"></i>
+                    How do I access the admin panel?
+                </div>
+                <div class="faq-answer">
+                    Business owners and administrators can manage deals by visiting the admin panel at /admin. From there, you can add new deals, view existing offers, and delete expired promotions.
+                </div>
+            </div>
+        </div>
+        
+        <div class="help-section">
+            <h2 class="section-title">
+                <i class="fa-solid fa-list-check"></i>
+                Key Features
+            </h2>
+            
+            <div class="feature-list">
+                <div class="feature-item">
+                    <i class="fa-solid fa-magnifying-glass feature-icon"></i>
+                    <div class="feature-content">
+                        <h3>Smart Search</h3>
+                        <p>Find local businesses instantly with real-time results from the Yelp Fusion API.</p>
+                    </div>
+                </div>
+                
+                <div class="feature-item">
+                    <i class="fa-solid fa-filter feature-icon"></i>
+                    <div class="feature-content">
+                        <h3>Category Filtering</h3>
+                        <p>Filter by food, retail, services, beauty, fitness, and more to find exactly what you need.</p>
+                    </div>
+                </div>
+                
+                <div class="feature-item">
+                    <i class="fa-solid fa-star feature-icon"></i>
+                    <div class="feature-content">
+                        <h3>Reviews & Ratings</h3>
+                        <p>Read and write reviews with 1-5 star ratings to help others discover great businesses.</p>
+                    </div>
+                </div>
+                
+                <div class="feature-item">
+                    <i class="fa-solid fa-bookmark feature-icon"></i>
+                    <div class="feature-content">
+                        <h3>Bookmarks</h3>
+                        <p>Save your favorite businesses for quick access later with our bookmark feature.</p>
+                    </div>
+                </div>
+                
+                <div class="feature-item">
+                    <i class="fa-solid fa-tag feature-icon"></i>
+                    <div class="feature-content">
+                        <h3>Special Deals</h3>
+                        <p>Discover exclusive discounts and coupons from local businesses in your area.</p>
+                    </div>
+                </div>
+                
+                <div class="feature-item">
+                    <i class="fa-solid fa-shield-halved feature-icon"></i>
+                    <div class="feature-content">
+                        <h3>Bot Prevention</h3>
+                        <p>Google reCAPTCHA verification ensures all reviews are from real people, not bots.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="help-section">
+            <h2 class="section-title">
+                <i class="fa-solid fa-circle-info"></i>
+                Need More Help?
+            </h2>
+            <p style="color: #666; line-height: 1.6;">
+                If you have additional questions or encounter any issues, please contact our support team. We're here to help you discover and support local businesses in your community!
+            </p>
+        </div>
+    </div>
+</body>
+</html>

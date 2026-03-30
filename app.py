@@ -139,6 +139,15 @@ def init_db():
 def search_yelp(term, location, category=None, limit=10):
     """
     Search for businesses on Yelp API.
+    
+    Args:
+        term (str): Search term (e.g., "coffee", "pizza")
+        location (str): Location to search in
+        category (str): Optional category filter
+        limit (int): Number of results to return
+    
+    Returns:
+        list: List of business dictionaries
     """
     params = {
         "term": term,
@@ -149,17 +158,8 @@ def search_yelp(term, location, category=None, limit=10):
     if category:
         params["categories"] = category
     
-    # DEBUG: Print what we're sending
-    print(f"DEBUG - Searching Yelp with params: {params}")
-    
     try:
         response = requests.get(YELP_URL, headers=YELP_HEADERS, params=params, timeout=10)
-        
-        # DEBUG: Print response
-        print(f"DEBUG - Status Code: {response.status_code}")
-        if response.status_code != 200:
-            print(f"DEBUG - Error Response: {response.text}")
-        
         response.raise_for_status()
         data = response.json()
         businesses = data.get("businesses", [])
@@ -367,32 +367,55 @@ def business_detail(business_id):
 @app.route('/add_review', methods=['POST'])
 def add_review():
     """
-    Add a user review for a business.
+    Add a user review for a business with comprehensive validation.
+    Validates on both syntactical and semantic levels.
     """
     data = request.get_json()
     
-    # Verify reCAPTCHA
+    # Verify reCAPTCHA (bot prevention)
     recaptcha_response = data.get('recaptcha_response', '')
     if not verify_recaptcha(recaptcha_response):
         return jsonify({'error': 'reCAPTCHA verification failed. Please try again.'}), 400
     
-    # Validate input
+    # Get input data
     business_id = data.get('business_id', '').strip()
     rating = data.get('rating')
     review_text = data.get('review_text', '').strip()
     reviewer_name = data.get('reviewer_name', '').strip()
     
-    # Input validation
+    # SYNTACTICAL VALIDATION (format and data type checks)
     if not business_id or not reviewer_name:
         return jsonify({'error': 'Business ID and reviewer name are required'}), 400
     
     if not rating or not (1 <= int(rating) <= 5):
         return jsonify({'error': 'Rating must be between 1 and 5'}), 400
     
+    # Validate name format and length
+    if len(reviewer_name) < 2 or len(reviewer_name) > 50:
+        return jsonify({'error': 'Name must be between 2 and 50 characters'}), 400
+    
+    if any(char.isdigit() for char in reviewer_name):
+        return jsonify({'error': 'Name cannot contain numbers'}), 400
+    
+    # Validate review text length if provided
+    if review_text and len(review_text) > 500:
+        return jsonify({'error': 'Review must be under 500 characters'}), 400
+    
+    # SEMANTIC VALIDATION (meaning and business logic checks)
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
         
+        # Check if business exists in database
+        business_exists = cursor.execute(
+            'SELECT id FROM businesses WHERE id = ?', (business_id,)
+        ).fetchone()
+        
+        if not business_exists:
+            conn.close()
+            return jsonify({'error': 'Business not found. Please search for the business first.'}), 400
+        
+        # Insert review into database
         cursor.execute('''
             INSERT INTO user_reviews (business_id, rating, review_text, reviewer_name)
             VALUES (?, ?, ?, ?)
@@ -404,7 +427,7 @@ def add_review():
         return jsonify({'success': True, 'message': 'Review added successfully'})
         
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        return jsonify({'error': f'Database error: {str(e)}'}), 500
 
 
 @app.route('/toggle_bookmark', methods=['POST'])
@@ -459,10 +482,18 @@ def admin():
     return render_template('admin.html')
 
 
+@app.route('/help')
+def help_page():
+    """
+    Help and FAQ page for users.
+    """
+    return render_template('help.html')
+
+
 @app.route('/admin/add_deal', methods=['POST'])
 def add_deal():
     """
-    Add a new deal for a business.
+    Add a new deal for a business with validation.
     """
     data = request.get_json()
     
@@ -472,13 +503,39 @@ def add_deal():
     discount_percent = data.get('discount_percent')
     expiry_date = data.get('expiry_date')
     
+    # SYNTACTICAL VALIDATION
     if not business_id or not title:
         return jsonify({'error': 'Business ID and title are required'}), 400
     
+    if len(title) < 3 or len(title) > 100:
+        return jsonify({'error': 'Title must be between 3 and 100 characters'}), 400
+    
+    if description and len(description) > 300:
+        return jsonify({'error': 'Description must be under 300 characters'}), 400
+    
+    if discount_percent:
+        try:
+            discount = int(discount_percent)
+            if discount < 0 or discount > 100:
+                return jsonify({'error': 'Discount must be between 0 and 100'}), 400
+        except ValueError:
+            return jsonify({'error': 'Discount must be a valid number'}), 400
+    
+    # SEMANTIC VALIDATION
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
         
+        # Check if business exists
+        business_exists = cursor.execute(
+            'SELECT id FROM businesses WHERE id = ?', (business_id,)
+        ).fetchone()
+        
+        if not business_exists:
+            conn.close()
+            return jsonify({'error': 'Business ID not found. Please search for the business first.'}), 400
+        
+        # Insert deal
         cursor.execute('''
             INSERT INTO deals (business_id, title, description, discount_percent, expiry_date)
             VALUES (?, ?, ?, ?, ?)
